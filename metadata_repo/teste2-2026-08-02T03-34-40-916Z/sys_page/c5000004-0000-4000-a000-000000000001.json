@@ -1,0 +1,20 @@
+{
+  "table": "sys_page",
+  "id": "c5000004-0000-4000-a000-000000000001",
+  "op": "upsert",
+  "reason": "direct",
+  "fields": {
+    "name": "change-set-picker",
+    "display_name": "Change Set Picker",
+    "source_code": "import { useState, useEffect } from 'react';\nimport { useSearchParams } from 'react-router-dom';\nimport { Select, Input, Table, Button, message, Typography } from 'antd';\nimport { dataApi } from '../api/client';\n\nconst ELIGIBLE_TABLES = [\n  'sys_page', 'sys_component', 'sys_server_class', 'sys_client_class', 'sys_client_script',\n  'sys_menu', 'sys_menu_item', 'sys_ui_action', 'sys_rest_api', 'sys_db_trigger', 'sys_job',\n  'sys_form', 'sys_form_field', 'sys_field_set',\n  'sys_workflow_definition', 'sys_workflow_step_definition', 'sys_workflow_transition_definition',\n];\n\nexport default function ChangeSetPicker() {\n  const [params] = useSearchParams();\n  const changeSetId = params.get('changeSetId');\n  const [table, setTable] = useState('sys_page');\n  const [q, setQ] = useState('');\n  const [rows, setRows] = useState([]);\n  const [loading, setLoading] = useState(false);\n\n  async function search() {\n    setLoading(true);\n    try {\n      const filters = [];\n      if (q) filters.push({ field: 'name', op: 'contains', value: q });\n      if ((table === 'sys_form' || table === 'sys_workflow_definition')) {\n        filters.push({ field: 'snapshot_of', op: 'is_null', value: true });\n      }\n      const res = await dataApi.list(table, { filters, limit: 50 });\n      setRows(res.data || res.items || res || []);\n    } catch (e) {\n      message.error('Search failed: ' + (e && e.message ? e.message : e));\n    } finally {\n      setLoading(false);\n    }\n  }\n\n  useEffect(() => { search(); }, [table]);\n\n  async function add(record) {\n    try {\n      await dataApi.create('sys_change_set_item', {\n        change_set_id: changeSetId, table_name: table, record_id: record.id,\n        operation: 'upsert', added_reason: 'manual',\n      });\n      message.success('Added \"' + (record.name || record.id) + '\"');\n    } catch (e) {\n      message.warning('Could not add (maybe already in this change set)');\n    }\n  }\n\n  if (!changeSetId) return <Typography.Text type=\"danger\">Missing changeSetId</Typography.Text>;\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Typography.Title level={4}>Add Records to Change Set</Typography.Title>\n      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>\n        <Select value={table} onChange={setTable} style={{ width: 320 }}\n          options={ELIGIBLE_TABLES.map((t) => ({ value: t, label: t }))} />\n        <Input.Search placeholder=\"Search by name\" value={q} onChange={(e) => setQ(e.target.value)}\n          onSearch={search} style={{ width: 320 }} />\n      </div>\n      <Table\n        rowKey=\"id\" loading={loading} dataSource={rows} pagination={false}\n        columns={[\n          { title: 'Name', dataIndex: 'name', render: (v, r) => v || r.display_name || r.id },\n          { title: '', width: 100, render: (_, r) => <Button size=\"small\" onClick={() => add(r)}>Add</Button> },\n        ]}\n      />\n    </div>\n  );\n}\n",
+    "page_type": "custom",
+    "table_id": null,
+    "is_active": true,
+    "created_by": null,
+    "created_at": "2026-07-31T00:54:39.818Z",
+    "updated_by": null,
+    "updated_at": "2026-07-31T00:54:42.074Z",
+    "is_home": false,
+    "home_query": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "table": "sys_folder",
+  "id": "08ea4381-01fb-428c-8ae9-a72b8ac908a8",
+  "op": "upsert",
+  "reason": "direct",
+  "fields": {
+    "name": "Billing",
+    "description": null,
+    "parent_id": "46298f1b-ed14-43dc-bdae-1aaa334e88ff",
+    "created_by": {
+      "__ref": "sys_user",
+      "by": "email",
+      "value": "admin@example.com"
+    },
+    "created_at": "2026-07-03T01:39:10.897Z"
+  }
+}
