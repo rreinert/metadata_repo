@@ -1,0 +1,24 @@
+{
+  "table": "sys_page",
+  "id": "7ee29f26-dbcb-41c8-a55e-0b86730eb435",
+  "op": "upsert",
+  "reason": "direct",
+  "fields": {
+    "name": "rpa-control-room",
+    "display_name": "RPA Control Room",
+    "source_code": "\nimport React, { useEffect, useState, useCallback } from 'react';\nimport { Card, Table, Tag, Typography, Space, Statistic, Row, Col } from 'antd';\nimport { DesktopOutlined, CloudServerOutlined, ThunderboltOutlined } from '@ant-design/icons';\n\nconst STATUS_COLOR = {\n  online: 'green',\n  busy: 'gold',\n  offline: 'default',\n  pending: 'blue',\n};\n\nexport default function RpaControlRoomPage() {\n  const [agents, setAgents] = useState([]);\n  const [loading, setLoading] = useState(true);\n\n  const load = useCallback(async () => {\n    const res = await window.metadata.dataApi.list('sys_rpa_agent', { page: 1, pageSize: 200, sort: 'name' });\n    setAgents(res.data || []);\n    setLoading(false);\n  }, []);\n\n  useEffect(() => { load(); }, [load]);\n\n  // Agents connect over the /rpa-agents namespace (a separate, agent-token\n  // authenticated Socket.io namespace from the one this page's own\n  // getSocket() call returns); the gateway relays status changes onto this\n  // page's namespace as \"rpa:agent:status\" so the grid updates live.\n  useEffect(() => {\n    const socket = window.metadata.getSocket();\n    if (!socket) return;\n    const onStatus = (evt) => {\n      setAgents((prev) => prev.map((a) => (a.id === evt.id ? { ...a, status: evt.status, last_heartbeat_at: evt.last_heartbeat_at } : a)));\n    };\n    socket.on('rpa:agent:status', onStatus);\n    return () => socket.off('rpa:agent:status', onStatus);\n  }, []);\n\n  const online = agents.filter((a) => a.status === 'online' || a.status === 'busy').length;\n\n  const columns = [\n    { title: 'Name', dataIndex: 'name', key: 'name' },\n    { title: 'Pool', dataIndex: 'pool_id', key: 'pool_id' },\n    { title: 'Hostname', dataIndex: 'hostname', key: 'hostname' },\n    { title: 'Mode', dataIndex: 'mode', key: 'mode' },\n    {\n      title: 'Status',\n      dataIndex: 'status',\n      key: 'status',\n      render: (status) => <Tag color={STATUS_COLOR[status] || 'default'}>{status}</Tag>,\n    },\n    {\n      title: 'Last Heartbeat',\n      dataIndex: 'last_heartbeat_at',\n      key: 'last_heartbeat_at',\n      render: (v) => (v ? new Date(v).toLocaleString() : '—'),\n    },\n  ];\n\n  return (\n    <Space direction=\"vertical\" style={{ width: '100%' }} size=\"large\">\n      <Card>\n        <Row gutter={32}>\n          <Col><Statistic title=\"Registered Agents\" value={agents.length} prefix={<DesktopOutlined />} /></Col>\n          <Col><Statistic title=\"Online / Busy\" value={online} prefix={<CloudServerOutlined />} valueStyle={{ color: online > 0 ? '#3f8600' : undefined }} /></Col>\n          <Col><Statistic title=\"Offline\" value={agents.length - online} prefix={<ThunderboltOutlined />} /></Col>\n        </Row>\n      </Card>\n      <Card title=\"Agents\">\n        <Table rowKey=\"id\" loading={loading} columns={columns} dataSource={agents} pagination={false} />\n        <Typography.Paragraph type=\"secondary\" style={{ marginTop: 16 }}>\n          To enroll a new agent: create a row here first (Name + Pool), then on that machine run{' '}\n          <code>node src/cli.js enroll --server &lt;url&gt; --agent-id &lt;id&gt;</code> followed by{' '}\n          <code>node src/cli.js start</code> from the <code>/agent</code> folder.\n        </Typography.Paragraph>\n      </Card>\n    </Space>\n  );\n}\n",
+    "page_type": "custom",
+    "table_id": null,
+    "is_active": true,
+    "created_by": null,
+    "created_at": "2026-07-27T23:36:38.953Z",
+    "updated_by": {
+      "__ref": "sys_user",
+      "by": "email",
+      "value": "admin@example.com"
+    },
+    "updated_at": "2026-07-27T23:41:21.604Z",
+    "is_home": false,
+    "home_query": null
+  }
+}
