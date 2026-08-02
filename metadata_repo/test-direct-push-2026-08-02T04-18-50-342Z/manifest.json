@@ -1,0 +1,16 @@
+{
+  "changeSetId": "adcb4fd0-6202-49ab-93a8-574a37c5e212",
+  "name": "__test_direct_push",
+  "generatedAt": "2026-08-02T04:18:50.342Z",
+  "createdAt": "2026-08-02T04:18:45.379Z",
+  "createdByEmail": null,
+  "createdByName": null,
+  "records": [
+    {
+      "table": "sys_ui_action",
+      "id": "955c87ed-4f48-4a81-bc2b-f19635d67773",
+      "op": "upsert",
+      "reason": "direct"
+    }
+  ]
+}

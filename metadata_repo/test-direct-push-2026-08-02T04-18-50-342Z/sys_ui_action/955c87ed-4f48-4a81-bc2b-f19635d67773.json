@@ -1,0 +1,24 @@
+{
+  "table": "sys_ui_action",
+  "id": "955c87ed-4f48-4a81-bc2b-f19635d67773",
+  "op": "upsert",
+  "reason": "direct",
+  "fields": {
+    "name": "Add to Change Set",
+    "table_name": "*",
+    "icon": "PlusCircleOutlined",
+    "action_type": "Form",
+    "navigate_to": null,
+    "confirm_message": null,
+    "position": "toolbar",
+    "sort_order": 100,
+    "is_active": true,
+    "created_by": null,
+    "created_at": "2026-08-02T03:16:24.806Z",
+    "updated_by": null,
+    "updated_at": null,
+    "source_code": "if (!recordId) { window.alert('Save the record first.'); return; }\nconst res = await callAction('/x/change-sets/add-manual', 'POST', { tableName, recordIds: [recordId] });\nwindow.alert('Added to change set: ' + res.changeSetName);",
+    "condition": "record && record.id",
+    "disabled_condition": null
+  }
+}
