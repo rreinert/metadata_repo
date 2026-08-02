@@ -1,0 +1,25 @@
+{
+  "changeSetId": "345db3f6-4f08-476b-8c59-6523573c3263",
+  "name": "teste1",
+  "generatedAt": "2026-08-02T01:47:08.234Z",
+  "records": [
+    {
+      "table": "sys_menu",
+      "id": "e4f32825-3e66-47ec-a919-2ea592c6e8ef",
+      "op": "upsert",
+      "reason": "direct"
+    },
+    {
+      "table": "sys_component",
+      "id": "45dea732-d345-4681-bc6e-68ae937969b0",
+      "op": "upsert",
+      "reason": "direct"
+    },
+    {
+      "table": "sys_page",
+      "id": "b4000004-0000-4000-a000-000000000001",
+      "op": "upsert",
+      "reason": "direct"
+    }
+  ]
+}
