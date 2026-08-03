@@ -1,0 +1,21 @@
+{
+  "table": "sys_user_group",
+  "id": "cb145fbf-c3c2-46c5-821a-9fd20e338239",
+  "op": "upsert",
+  "reason": "direct",
+  "fields": {
+    "created_by": {
+      "__ref": "sys_user",
+      "by": "email",
+      "value": "admin@example.com"
+    },
+    "created_at": "2026-08-03T00:06:30.681Z",
+    "updated_by": {
+      "__ref": "sys_user",
+      "by": "email",
+      "value": "admin@example.com"
+    },
+    "updated_at": "2026-08-03T00:06:30.681Z",
+    "name": "test_group"
+  }
+}

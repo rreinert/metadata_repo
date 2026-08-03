@@ -1,0 +1,16 @@
+{
+  "changeSetId": "9b47800a-7663-42ca-a6d5-cffe52c81ea0",
+  "name": "teste4",
+  "generatedAt": "2026-08-03T00:07:44.784Z",
+  "createdAt": "2026-08-02T04:04:44.701Z",
+  "createdByEmail": "admin@example.com",
+  "createdByName": "Administrator",
+  "records": [
+    {
+      "table": "sys_user_group",
+      "id": "cb145fbf-c3c2-46c5-821a-9fd20e338239",
+      "op": "upsert",
+      "reason": "direct"
+    }
+  ]
+}
